@@ -8,7 +8,7 @@ void setup() {
   background(255);
   size(640,360);
   // Maximum speed, initial position and initial velocity of the Mover
-  mover = new Mover(5.0, new PVector(width/2, height/2), new PVector(5.0, 0));
+  mover = new Mover(new PVector(width/2, height/2), 5);
   frameRate(25);
 }
 
@@ -29,10 +29,10 @@ class Mover {
   PVector velocity;
   float topspeed;
 
-  Mover(float _topspeed, PVector _location, PVector _velocity) {
+  Mover(PVector _location, float _topspeed) {
     topspeed = _topspeed;
     location = _location;
-    velocity = _velocity;
+    velocity = new PVector(topspeed,0);
   }
 
   void update() {
