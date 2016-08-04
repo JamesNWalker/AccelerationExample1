@@ -14,7 +14,7 @@ void setup() {
 
 void draw() {
   noStroke();
-  fill(255,25);
+  fill(255);
   rect(0,0,width,height);
   // Update the location
   mover.update();
@@ -27,18 +27,19 @@ class Mover {
   // The Mover tracks location, velocity, and acceleration 
   PVector location;
   PVector velocity;
+  PVector acceleration;
   float topspeed;
 
   Mover(PVector _location, float _topspeed) {
     topspeed = _topspeed;
     location = _location;
-    velocity = new PVector(topspeed,0);
+    velocity = new PVector(topspeed, 0);
   }
 
   void update() {
     // Compute a vector pointing towards the centre of the canvas
     PVector centre = new PVector(width/2, height/2);
-    PVector acceleration = PVector.sub(centre, location);
+    acceleration = PVector.sub(centre, location);
     // Set magnitude of acceleration
     acceleration.setMag(0.25);
     // Velocity changes according to acceleration
@@ -50,9 +51,50 @@ class Mover {
   }
 
   void display() {
-    fill(0);
-    rectMode(CENTER);
-    rect(location.x, location.y, 9, 9);
-    rectMode(CORNER);
+    stroke(0);
+    float k = 25 + velocity.mag() * 5;  // Arrow length
+    float r = 4.0;  // Arrow size
+    
+    // Draw an arrow pointing in the direction of travel
+    float theta = velocity.heading() + radians(90);
+    
+    pushMatrix();
+    translate(location.x, location.y);
+    // Draw ball
+    fill(0, 0, 255);
+    ellipse(0, 0, 10, 10);
+    
+    // Draw arrow
+    rotate(theta);
+    line(0, 0, 0, -k);
+    translate(0, -k);
+    fill(255, 0, 0);
+    beginShape(TRIANGLES);
+    vertex(0, -r*2);
+    vertex(-r, r*2);
+    vertex(r, r*2);
+    endShape();
+    
+    popMatrix();
+    
+    k = 25;
+    // Draw an arrow pointing in the direction of acceleration
+    float alpha = acceleration.heading() + radians(90);
+    
+    pushMatrix();
+    translate(location.x, location.y);
+    
+    // Draw arrow
+    rotate(alpha);
+    line(0, 0, 0, -k);
+    translate(0, -k);
+    fill(255, 255, 0, 128);
+    beginShape(TRIANGLES);
+    vertex(0, -r*2);
+    vertex(-r, r*2);
+    vertex(r, r*2);
+    endShape();
+    
+    popMatrix();
   }
 }
